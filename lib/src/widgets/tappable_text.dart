@@ -1,4 +1,3 @@
-import 'package:amgad_business_card/src/colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,6 +24,7 @@ class _TappableTextState extends State<TappableText> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return GestureDetector(
       onTapDown: (_) => setState(() => _pressed = true),
       onTapUp: (_) => setState(() => _pressed = false),
@@ -35,7 +35,11 @@ class _TappableTextState extends State<TappableText> {
         children: [
           Text(
             '${widget.label}:',
-            style: const TextStyle(fontSize: 20, color: textColor, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              color: colors.onSurface,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -43,9 +47,11 @@ class _TappableTextState extends State<TappableText> {
               duration: const Duration(milliseconds: 150),
               style: TextStyle(
                 fontSize: 20,
-                color: _pressed ? textColor : accentColor,
-                decoration: _pressed ? TextDecoration.none : TextDecoration.underline,
-                decorationColor: accentColor,
+                color: _pressed ? colors.onSurface : colors.secondary,
+                decoration: _pressed
+                    ? TextDecoration.none
+                    : TextDecoration.underline,
+                decorationColor: colors.secondary,
               ),
               child: Text(widget.text),
             ),

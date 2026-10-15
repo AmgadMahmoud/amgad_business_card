@@ -2,10 +2,7 @@ import 'package:go_router/go_router.dart';
 
 /// Metadata wrapper for GoRoute with authentication requirements
 class RouteConfig<T extends RouteBase> {
-  const RouteConfig({
-    required this.route,
-    this.isGuarded = false,
-  });
+  const RouteConfig({required this.route, this.isGuarded = false});
 
   /// The actual GoRoute definition
   final T route;
@@ -20,5 +17,6 @@ class RouteConfig<T extends RouteBase> {
   String get path => (route is GoRoute ? (route as GoRoute).path : '');
 
   @override
-  String toString() => 'RouteConfig(name: $name, path: $path, isGuarded: $isGuarded)';
+  String toString() =>
+      'RouteConfig(name: $name, path: $path, isGuarded: $isGuarded)';
 }

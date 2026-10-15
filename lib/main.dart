@@ -1,5 +1,6 @@
 import 'package:amgad_business_card/src/colors/colors.dart';
 import 'package:amgad_business_card/src/navigation/router.dart';
+import 'package:amgad_business_card/src/widgets/theme_toggle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
@@ -14,14 +15,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: 'Amgad Mahmoud Business Card',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
-        useMaterial3: true,
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeMode,
+      builder: (context, mode, _) => MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: 'Amgad Mahmoud Business Card',
+        theme: buildTheme(lightColorScheme),
+        darkTheme: buildTheme(darkColorScheme),
+        themeMode: mode,
+        routerConfig: router,
       ),
-      routerConfig: router,
     );
   }
 }

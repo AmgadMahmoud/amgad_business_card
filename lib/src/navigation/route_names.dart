@@ -21,9 +21,11 @@ class RouteNames {
 
   /// Get list of GoRoutes for GoRouter configuration (top-level only)
 
-  static List<RouteBase> get routes => all.map((RouteConfig config) => config.route).toList();
+  static List<RouteBase> get routes =>
+      all.map((RouteConfig config) => config.route).toList();
 
-  static List<String> get routeNames => all.map((RouteConfig config) => config.name).toList();
+  static List<String> get routeNames =>
+      all.map((RouteConfig config) => config.name).toList();
 
   /// Get list of guarded route configs
   static List<RouteConfig> get guardedRoutes =>

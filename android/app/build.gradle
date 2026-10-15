@@ -11,6 +11,20 @@ if (localPropertiesFile.exists()) {
     }
 }
 
+// Signing keys live outside version control: android/key.properties (release)
+// and android/debug-key.properties (debug). storeFile is relative to android/.
+def loadKeyProperties(String name) {
+    def properties = new Properties()
+    def file = rootProject.file(name)
+    if (file.exists()) {
+        file.withReader('UTF-8') { reader -> properties.load(reader) }
+    }
+    return properties
+}
+
+def releaseKeyProperties = loadKeyProperties('key.properties')
+def debugKeyProperties = loadKeyProperties('debug-key.properties')
+
 android {
     namespace "com.amgad.amgad_business_card"
     compileSdk flutter.compileSdkVersion
@@ -36,11 +50,35 @@ android {
         versionName flutter.versionName
     }
 
-    buildTypes {
+    signingConfigs {
+        debug {
+            if (debugKeyProperties['storeFile']) {
+                storeFile rootProject.file(debugKeyProperties['storeFile'])
+                storePassword debugKeyProperties['storePassword']
+                keyAlias debugKeyProperties['keyAlias']
+                keyPassword debugKeyProperties['keyPassword']
+            }
+        }
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            if (releaseKeyProperties['storeFile']) {
+                storeFile rootProject.file(releaseKeyProperties['storeFile'])
+                storePassword releaseKeyProperties['storePassword']
+                keyAlias releaseKeyProperties['keyAlias']
+                keyPassword releaseKeyProperties['keyPassword']
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
             signingConfig signingConfigs.debug
+        }
+        release {
+            // Without key.properties (e.g. a fresh clone) fall back to debug
+            // signing so `flutter run --release` still works.
+            signingConfig releaseKeyProperties['storeFile']
+                    ? signingConfigs.release
+                    : signingConfigs.debug
         }
     }
 }
